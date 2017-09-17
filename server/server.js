@@ -15,14 +15,13 @@ app.use(express.static(publicpath));
 io.on('connection', (socket) => {
   console.log('New user connected');
 
-  socket.emit('newMessage', {
-    from :'server',
-    text: 'You have joined the chatroom',
-    createdAt: 'now'
-  });
-
   socket.on('createMessage', (message) => {
     console.log('Message:', message.text);
+    io.emit('newMessage', {
+      from: message.from,
+      text: message.text,
+      createdAt: new Date().getTime()
+    });
   });
 
   socket.on('disconnect', () => {
